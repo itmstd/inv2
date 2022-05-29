@@ -36,8 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   get:
   sizer:
-  sembast:
-  sembast_web:
+  sembast: ^3.2.0
+  sembast_web: ^2.0.1+1
   path_provider:
 
 dev_dependencies:

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:inv2/Controller/todo_db.dart';
+import 'dart:io';
 
 import '../Model/todo.dart';
 
@@ -17,17 +18,17 @@ class MyHomePageController extends GetxController {
   @override
   void onInit(){
     super.onInit();
-    test = "test jer";
-    getToDoList();
+    test = "initialized";
+    getToDoList(null); //comment this when unit testing
   }
 
   //grab To-Do list from Sembast
-  Future getToDoList() async {
+  Future getToDoList(Directory? direction) async {
     isLoaded.value = false;
     completed = <bool>[].obs;
     timeLeftList = <String>[].obs;
-    await db.getTodos();
-    todos = await db.getTodos();
+    await db.getTodos(null);
+    todos = await db.getTodos(null);
 
     if (todos.isNotEmpty){
       // print("sini");
@@ -54,13 +55,13 @@ class MyHomePageController extends GetxController {
 
     await db.updateTodo(todo);
 
-    getToDoList();
+    getToDoList(null);
   }
 
   //to calculate time left from the end date of the To-Do list
   String timeLeft(Todo todo) {
-    // Duration duration = DateTime.parse(todo.endDate).difference(DateTime.parse(todo.startDate)); //for unit testing
-    Duration duration = DateTime.parse(todo.endDate).difference(DateTime.now()); //for app operation
+    Duration duration = DateTime.parse(todo.endDate).difference(DateTime.parse(todo.startDate)); //for unit testing
+    // Duration duration = DateTime.parse(todo.endDate).difference(DateTime.now()); //for app operation
     return("${duration.toString().split(":")[0]} hrs ${duration.toString().split(":")[1]} min");
   }
 }

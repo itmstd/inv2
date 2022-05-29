@@ -23,3 +23,8 @@ What can be done inside this app?
 - [get](https://pub.dev/packages/get)
 - [sembast](https://pub.dev/packages/sembast)
 - [path_provider](https://pub.dev/packages/path_provider)
+
+#### What can be improved from here
+
+- Add sembast web support into this project.
+- Add delete function for the To-Do record.

@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
+import 'package:sembast_web/sembast_web.dart';
 
 import '../Model/todo.dart';
 
@@ -12,24 +15,42 @@ class TodoDb {
   //   return _singleton;
   // }
 
-  DatabaseFactory dbFactory = databaseFactoryIo;
   final store = intMapStoreFactory.store();
   Database? _database;
 
   Future<Database?> get database async {
     if (_database == null) {
-      await _openDb().then((db) {
+      await _openDb(null).then((db) {
         _database = db;
       });
     }
     return _database;
   }
 
-  Future _openDb() async {
-    final docsPath = await getApplicationDocumentsDirectory();
-    final dbPath = join(docsPath.path, 'todos.db');
-    final db = await dbFactory.openDatabase(dbPath);
-    return db;
+  Future _openDb(Directory? directory) async {
+    if(directory==null) {
+      if(kIsWeb){
+        print("run on web");
+        DatabaseFactory dbFactoryWeb = databaseFactoryWeb;
+        // final docsPath = await getApplicationDocumentsDirectory();
+        final dbPath = join('todos.db');
+        final db = await dbFactoryWeb.openDatabase(dbPath);
+        return db;
+      } else {
+        DatabaseFactory dbFactory = databaseFactoryIo;
+        final docsPath = await getApplicationDocumentsDirectory();
+        final dbPath = join(docsPath.path, 'todos.db');
+        final db = await dbFactory.openDatabase(dbPath);
+        return db;
+      }
+    } else {
+      DatabaseFactory dbFactory = databaseFactoryIo;
+      final docsPath = directory;
+      final dbPath = join(docsPath.path, 'todos.db');
+      final db = await dbFactory.openDatabase(dbPath);
+      _database = db;
+      return db;
+    }
   }
 
   Future insertTodo(Todo todo) async {
@@ -52,8 +73,8 @@ class TodoDb {
     await store.delete(_database!);
   }
 
-  Future<List<Todo>> getTodos() async {
-    await database;
+  Future<List<Todo>> getTodos(Directory? directory) async {
+    directory == null ? await database : await _openDb(directory);
     final finder = Finder(sortOrders: [
       SortOrder('priority'),
       SortOrder('id'),

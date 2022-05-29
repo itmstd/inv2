@@ -8,27 +8,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inv2/Controller/my_home_page_controller.dart';
+import 'package:inv2/Controller/todo_db.dart';
 import 'package:inv2/Model/todo.dart';
 
 import 'package:inv2/main.dart';
 
 import 'package:get/get.dart';
 
-void main() {
-  test('''Test dependency injection''',
-          () {
-        /// You can test the controller without the lifecycle,
-        /// but it's not recommended unless you're not using
-        ///  GetX dependency injection
-        MyHomePageController controller = Get.put(MyHomePageController());
-        // expect(controller.name.value, 'name1');
+import 'dart:io' show Directory;
 
-        /// If you are using it, you can test everything,
-        /// including the state of the application after each lifecycle.
-        controller.getToDoList();
-        expect(controller.test, 'test jer');
-        // expectLater(controller.todos[0].todoTitle, "TEst 1");
-        expect(controller.timeLeft(Todo("Test", "2022-06-13", "2022-05-28", false)), "-384 hrs 00 min");
+import 'package:path_provider/path_provider.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-      });
+const String kApplicationDocumentsPath = 'applicationDocumentsPath';
+
+void main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() async {
+    PathProviderPlatform.instance = FakePathProviderPlatform();
+  });
+
+  MyHomePageController controller = Get.put(MyHomePageController());
+
+  test('Test sembast initialization', () async {
+    TodoDb db = TodoDb();
+    Directory result = await getApplicationDocumentsDirectory();
+    List<Todo> todoList = await db.getTodos(result);
+    expect(result.path, kApplicationDocumentsPath);
+    expect(todoList, []);
+  });
+
+  test('Home Page controller Test', () {
+    expect(controller.test, 'initialized');
+  });
+  test('Time Left Test', (){
+    expect(controller.timeLeft(Todo("Test", "2022-06-13", "2022-05-28", false)), "-384 hrs 00 min");
+  });
+
+}
+class FakePathProviderPlatform extends Fake
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
+
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return kApplicationDocumentsPath;
+  }
 }

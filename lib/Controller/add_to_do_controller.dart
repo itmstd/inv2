@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inv2/Controller/todo_db.dart';
@@ -38,25 +39,35 @@ class AddToDoController extends GetxController{
 
   //insert new entry into Sembast
   void addNew() async {
-    TodoDb db = TodoDb();
-    await db.database;
+    if(toDoTitle.text != "" && startDate.value != "" && endDate.value != "") {
+      TodoDb db = TodoDb();
+      await db.database;
 
-    await db.insertTodo(Todo(toDoTitle.text, DateTime.parse(startDate.value).toString(), DateTime.parse(endDate.value).toString(), false));
+      await db.insertTodo(Todo(
+          toDoTitle.text, DateTime.parse(startDate.value).toString(),
+          DateTime.parse(endDate.value).toString(), false));
+      Get.back();
+    } else {
+      Get.snackbar("Need to fill up all fields", "", snackPosition: kIsWeb ? SnackPosition.TOP : SnackPosition.BOTTOM);
+    }
 
-    Get.back();
   }
 
   //update existing entry into Sembast
   void updateTodo(Todo todo) async{
-    TodoDb db = TodoDb();
-    await db.database;
+    if(toDoTitle.text != "" && startDate.value != "" && endDate.value != "") {
+      TodoDb db = TodoDb();
+      await db.database;
 
-    todo.todoTitle = toDoTitle.text;
-    todo.startDate = DateTime.parse(startDate.value).toString();
-    todo.endDate = DateTime.parse(endDate.value).toString();
+      todo.todoTitle = toDoTitle.text;
+      todo.startDate = DateTime.parse(startDate.value).toString();
+      todo.endDate = DateTime.parse(endDate.value).toString();
 
-    await db.updateTodo(todo);
+      await db.updateTodo(todo);
 
-    Get.back();
+      Get.back();
+    } else {
+      Get.snackbar("Need to fill up all fields", "", snackPosition: kIsWeb ? SnackPosition.TOP : SnackPosition.BOTTOM);
+    }
   }
 }

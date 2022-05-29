@@ -19,8 +19,9 @@ class MyHomePage extends StatelessWidget {
       ),
       body: Obx(() => controller.isLoaded.value ? body(controller) : const Center(child: CircularProgressIndicator())), //While waiting for the data to be loaded the app will show progress indicator
       bottomNavigationBar: SafeArea(
+        minimum: EdgeInsets.all(10),
         child: FloatingActionButton(
-          onPressed: () => Get.to(() => const AddToDoScreen())?.then((value) => controller.getToDoList()),
+          onPressed: () => Get.to(() => const AddToDoScreen())?.then((value) => controller.getToDoList(null)),
           backgroundColor: const Color(0xffef5a25),
           child: const Icon(Icons.add, size: 28,),
         ),
@@ -53,7 +54,7 @@ class MyHomePage extends StatelessWidget {
                   // todoTitle: controller.todos[index].todoTitle,
                   // startDate: controller.todos[index].startDate,
                   // endDate: controller.todos[index].endDate,
-                ))?.then((value) => controller.getToDoList()),
+                ))?.then((value) => controller.getToDoList(null)),
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   child: Column(
