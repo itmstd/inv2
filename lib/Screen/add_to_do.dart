@@ -20,11 +20,14 @@ class AddToDoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    //Dependency injection
     AddToDoController controller = Get.put(AddToDoController());
     controller.toDoTitle.text = todoUpdate == null ? "" : todoUpdate!.todoTitle;
     controller.startDate.value = todoUpdate == null ? "" : todoUpdate!.startDate;
     controller.endDate.value = todoUpdate == null ? "" : todoUpdate!.endDate;
 
+    //Build Page Widget
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(

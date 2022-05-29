@@ -24,6 +24,11 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 const String kApplicationDocumentsPath = 'applicationDocumentsPath';
 
 void main() async {
+  //Line 22 on my_home_page_controller.dart need to be commented before run the test
+  //ss the dependency uses the Sembast implementation for real app.
+  //For unit testing there is another Sembast implementation
+  //so need to comment that to skip the initialization for real app usage
+
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() async {

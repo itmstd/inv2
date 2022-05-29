@@ -30,7 +30,7 @@ class TodoDb {
   Future _openDb(Directory? directory) async {
     if(directory==null) {
       if(kIsWeb){
-        print("run on web");
+        // print("run on web");
         DatabaseFactory dbFactoryWeb = databaseFactoryWeb;
         // final docsPath = await getApplicationDocumentsDirectory();
         final dbPath = join('todos.db');

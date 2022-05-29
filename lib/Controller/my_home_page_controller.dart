@@ -60,8 +60,8 @@ class MyHomePageController extends GetxController {
 
   //to calculate time left from the end date of the To-Do list
   String timeLeft(Todo todo) {
-    Duration duration = DateTime.parse(todo.endDate).difference(DateTime.parse(todo.startDate)); //for unit testing
-    // Duration duration = DateTime.parse(todo.endDate).difference(DateTime.now()); //for app operation
+    // Duration duration = DateTime.parse(todo.endDate).difference(DateTime.parse(todo.startDate)); //for unit testing
+    Duration duration = DateTime.parse(todo.endDate).difference(DateTime.now()); //for app operation
     return("${duration.toString().split(":")[0]} hrs ${duration.toString().split(":")[1]} min");
   }
 }
